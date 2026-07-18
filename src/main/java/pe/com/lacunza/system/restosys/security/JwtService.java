@@ -1,6 +1,7 @@
 package pe.com.lacunza.system.restosys.security;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -48,18 +49,24 @@ public class JwtService {
 
     // 4. Validar si el token pertenece al usuario y no ha expirado
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
-    }
+        if (token == null || token.isBlank() || userDetails == null) {
+            return false;
+        }
 
-    // --- Métodos Auxiliares Privados ---
+        try {
+            Claims claims = extractAllClaims(token);
 
-    private boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
-    }
+            String username = claims.getSubject();
+            Date expiration = claims.getExpiration();
 
-    private Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
+            return username != null
+                    && username.equals(userDetails.getUsername())
+                    && expiration != null
+                    && expiration.after(new Date());
+
+        } catch (JwtException | IllegalArgumentException exception) {
+            return false;
+        }
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
