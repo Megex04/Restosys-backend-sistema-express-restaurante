@@ -9,7 +9,6 @@ import pe.com.lacunza.system.restosys.service.OrderService;
 
 @RestController
 @RequestMapping("/api/orders")
-@CrossOrigin(origins = "http://localhost:4200")
 @RequiredArgsConstructor
 public class OrderController {
 

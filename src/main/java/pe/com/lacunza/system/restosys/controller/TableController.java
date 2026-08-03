@@ -11,7 +11,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/tables")
-@CrossOrigin(origins = "http://localhost:4200") // Permite peticiones desde Angular local
 @RequiredArgsConstructor
 public class TableController {
 

@@ -10,7 +10,6 @@ import pe.com.lacunza.system.restosys.service.BillingService;
 
 @RestController
 @RequestMapping("/api/billing")
-@CrossOrigin(origins = "*") // Asegúrate de configurar CORS correctamente para Angular
 public class BillingController {
 
     private final BillingService billingService;
